@@ -13,8 +13,16 @@ from rest_framework.test import APITestCase
 from orders.models import Order
 
 
-def get_order_payload():
-    return {
+ORDER_URL = reverse('order-list')
+
+
+def detail_url(order_id):
+    """Return order detail URL"""
+    return reverse('order-detail', args=[order_id])
+
+
+def get_order_payload(**params):
+    defaults = {
         'origin_location': [-98.202624, 19.040869],
         'destination_location': [-97.831364, 18.919244],
         'address': 'Cuahutemoc',
@@ -25,13 +33,20 @@ def get_order_payload():
         'products_size': 'LG',
         'status': 'CREATED'
     }
+    defaults.update(params)
+    return defaults
 
-ORDER_URL = reverse('order-list')
 
+def sample_order(**params):
+    data = get_order_payload(**params)
 
-def detail_url(order_id):
-    """Return order detail URL"""
-    return reverse('order-detail', args=[order_id])
+    if isinstance(data['origin_location'], list):
+        data['origin_location'] = Point(data['origin_location'])
+
+    if isinstance(data['destination_location'], list):
+        data['destination_location'] = Point(data['destination_location'])
+
+    return Order.objects.create(**data)
 
 
 class OrderCreationTests(APITestCase):
@@ -60,12 +75,7 @@ class OrderCreationTests(APITestCase):
 class OrderUpdateTests(APITestCase):
 
     def setUp(self):
-        # Create order object
-        data = get_order_payload()
-        data['origin_location'] = Point(data['origin_location'])
-        data['destination_location'] = Point(data['destination_location'])
-
-        self.order = Order.objects.create(**data)
+        self.order = sample_order()
 
     def test_update_order_fields(self):
         url = detail_url(self.order.pk)
@@ -88,3 +98,18 @@ class OrderUpdateTests(APITestCase):
         updated_order.zipcode = new_data['zipcode']
         updated_order.number_products = new_data['number_products']
         updated_order.products_size = new_data['products_size']
+
+    def test_update_status_create_to_collected(self):
+        order = sample_order()
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.COLLECTED
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = payload['status']
