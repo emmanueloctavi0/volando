@@ -78,6 +78,10 @@ class OrderUpdateTests(APITestCase):
         self.order = sample_order()
 
     def test_update_order_fields(self):
+        """
+        Test a order can be update with a correct
+        payload
+        """
         url = detail_url(self.order.pk)
         data = get_order_payload()
 
@@ -99,7 +103,10 @@ class OrderUpdateTests(APITestCase):
         updated_order.number_products = new_data['number_products']
         updated_order.products_size = new_data['products_size']
 
-    def test_update_status_create_to_collected(self):
+    def test_update_status_created_to_collected(self):
+        """Test a order status can change from
+        created to collected
+        """
         order = sample_order()
         url = detail_url(order.pk)
 
@@ -112,4 +119,115 @@ class OrderUpdateTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         updated_order = Order.objects.get(pk=order.pk)
-        updated_order.status = payload['status']
+        updated_order.status = Order.Status.COLLECTED
+
+    def test_update_status_collected_to_in_station(self):
+        """Test a order status can change from
+        collected to in_station
+        """
+        order = sample_order(status=Order.Status.COLLECTED)
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.IN_STATION
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = Order.Status.IN_STATION
+
+    def test_update_status_in_station_to_on_route(self):
+        """Test a order status can change from
+        in_station to on_route
+        """
+        order = sample_order(status=Order.Status.IN_STATION)
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.ON_ROUTE
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = Order.Status.ON_ROUTE
+
+    def test_update_status_on_route_to_delivered(self):
+        """Test a order status can change from
+        on_route to delivered
+        """
+        order = sample_order(status=Order.Status.ON_ROUTE)
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.DELIVERED
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = Order.Status.DELIVERED
+
+    def test_update_status_can_be_cancelled(self):
+        """
+        Test the status can be cancelled when
+        the status is created
+        """
+        order = sample_order(status=Order.Status.CREATED)
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.CANCELLED
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = Order.Status.CANCELLED
+
+    def test_status_can_not_be_cancelled_when_is_on_route(self):
+        """
+        Test the status can not be cancelled when
+        the status is on_route
+        """
+        order = sample_order(status=Order.Status.ON_ROUTE)
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.CANCELLED
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = Order.Status.ON_ROUTE
+
+    def test_status_can_not_be_cancelled_when_is_delivered(self):
+        """
+        Test the status can not be cancelled when
+        the status is delivered
+        """
+        order = sample_order(status=Order.Status.DELIVERED)
+        url = detail_url(order.pk)
+
+        payload = {
+            'status': Order.Status.CANCELLED
+        }
+
+        response = self.client.patch(url, payload, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        updated_order = Order.objects.get(pk=order.pk)
+        updated_order.status = Order.Status.DELIVERED
