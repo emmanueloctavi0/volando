@@ -11,7 +11,7 @@ from rest_framework import serializers
 from warrants.models import Warrant
 
 
-class WarrantSerializer(serializers.HyperlinkedModelSerializer):
+class WarrantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warrant
         fields = '__all__'
@@ -27,3 +27,11 @@ class WarrantSerializer(serializers.HyperlinkedModelSerializer):
 
     def validate_destination_location(self, value: list) -> Point:
         return self._validate_point(value)
+
+    def save(self, **kwargs):
+        # Always save it with the status created
+        if not self.instance:
+            self.validated_data.update({
+                'status': Warrant.Status.CREATED
+            })
+        return super().save(**kwargs)
