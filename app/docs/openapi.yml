@@ -11,9 +11,7 @@ paths:
       tags:
       - orders
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -53,9 +51,7 @@ paths:
                 description: Create or update a Order
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - tokenAuth: []
       responses:
         '201':
           content:
@@ -77,9 +73,7 @@ paths:
       tags:
       - orders
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -124,9 +118,7 @@ paths:
                 description: Create or update a Order
         required: true
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -170,9 +162,7 @@ paths:
                 summary: Create or update a Order
                 description: Create or update a Order
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - tokenAuth: []
       responses:
         '200':
           content:
@@ -193,9 +183,7 @@ paths:
       tags:
       - orders
       security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
+      - tokenAuth: []
       responses:
         '204':
           description: No response body
@@ -283,6 +271,9 @@ components:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
           title: Order status
+        user:
+          type: integer
+          nullable: true
       required:
       - address
       - created_at
@@ -340,6 +331,9 @@ components:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
           title: Order status
+        user:
+          type: integer
+          nullable: true
     ProductsSizeEnum:
       enum:
       - SM
@@ -363,6 +357,11 @@ components:
       type: apiKey
       in: cookie
       name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
 servers:
 - url: http://localhost:8080
   description: localhost
