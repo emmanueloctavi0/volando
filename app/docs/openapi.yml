@@ -1,0 +1,338 @@
+openapi: 3.0.3
+info:
+  title: Volando API
+  version: 1.0.0
+  description: A microservice to take users orders
+paths:
+  /warrants/:
+    get:
+      operationId: warrants_list
+      description: API endpoint that allows warrants to be viewed or edited.
+      tags:
+      - warrants
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Warrant'
+          description: ''
+    post:
+      operationId: warrants_create
+      description: API endpoint that allows warrants to be viewed or edited.
+      tags:
+      - warrants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Warrant'
+            examples:
+              WarrantPayload:
+                value:
+                  origin_location:
+                  - -98.202624
+                  - 19.040869
+                  destination_location:
+                  - -97.831364
+                  - 18.919244
+                  is_active: true
+                  address: Cuahutemoc
+                  zipcode: '75420'
+                  ext_number: '07'
+                  int_number: B-311
+                  number_products: 3
+                  products_size: LG
+                  status: CREATED
+                summary: Create or update a warrant
+                description: Create or update a warrant
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warrant'
+          description: ''
+  /warrants/{id}/:
+    get:
+      operationId: warrants_retrieve
+      description: API endpoint that allows warrants to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this warrant.
+        required: true
+      tags:
+      - warrants
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warrant'
+          description: ''
+    put:
+      operationId: warrants_update
+      description: API endpoint that allows warrants to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this warrant.
+        required: true
+      tags:
+      - warrants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Warrant'
+            examples:
+              WarrantPayload:
+                value:
+                  origin_location:
+                  - -98.202624
+                  - 19.040869
+                  destination_location:
+                  - -97.831364
+                  - 18.919244
+                  is_active: true
+                  address: Cuahutemoc
+                  zipcode: '75420'
+                  ext_number: '07'
+                  int_number: B-311
+                  number_products: 3
+                  products_size: LG
+                  status: CREATED
+                summary: Create or update a warrant
+                description: Create or update a warrant
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warrant'
+          description: ''
+    patch:
+      operationId: warrants_partial_update
+      description: API endpoint that allows warrants to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this warrant.
+        required: true
+      tags:
+      - warrants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWarrant'
+            examples:
+              WarrantPayload:
+                value:
+                  origin_location:
+                  - -98.202624
+                  - 19.040869
+                  destination_location:
+                  - -97.831364
+                  - 18.919244
+                  is_active: true
+                  address: Cuahutemoc
+                  zipcode: '75420'
+                  ext_number: '07'
+                  int_number: B-311
+                  number_products: 3
+                  products_size: LG
+                  status: CREATED
+                summary: Create or update a warrant
+                description: Create or update a warrant
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Warrant'
+          description: ''
+    delete:
+      operationId: warrants_destroy
+      description: API endpoint that allows warrants to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this warrant.
+        required: true
+      tags:
+      - warrants
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    PatchedWarrant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        origin_location:
+          type: array
+          items: {}
+        destination_location:
+          type: array
+          items: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+        address:
+          type: string
+          maxLength: 250
+        zipcode:
+          type: string
+          maxLength: 100
+        ext_number:
+          type: string
+          title: Number
+          maxLength: 50
+        int_number:
+          type: string
+          title: Internal number
+          maxLength: 50
+        number_products:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Number of products
+        products_size:
+          $ref: '#/components/schemas/ProductsSizeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Warrant status
+    ProductsSizeEnum:
+      enum:
+      - SM
+      - M
+      - LG
+      type: string
+    StatusEnum:
+      enum:
+      - CREATED
+      - COLLECTED
+      - IN_STATION
+      - ON_ROUTE
+      - DELIVERED
+      - CANCELLED
+      type: string
+    Warrant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        origin_location:
+          type: array
+          items: {}
+        destination_location:
+          type: array
+          items: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+        address:
+          type: string
+          maxLength: 250
+        zipcode:
+          type: string
+          maxLength: 100
+        ext_number:
+          type: string
+          title: Number
+          maxLength: 50
+        int_number:
+          type: string
+          title: Internal number
+          maxLength: 50
+        number_products:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Number of products
+        products_size:
+          $ref: '#/components/schemas/ProductsSizeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Warrant status
+      required:
+      - address
+      - created_at
+      - destination_location
+      - ext_number
+      - id
+      - int_number
+      - number_products
+      - origin_location
+      - products_size
+      - updated_at
+      - zipcode
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+servers:
+- url: http://localhost:8080
+  description: localhost

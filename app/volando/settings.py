@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Other apps
     'django.contrib.gis',
     'rest_framework',
+    'drf_spectacular',
 
     # Local apps
     'volando',
@@ -112,6 +113,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django REST Framework
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
+}
+
+# Documentation settings
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Volando API',
+    'DESCRIPTION': 'A microservice to take users orders',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SERVERS': [
+        {'url': 'http://localhost:8080', 'description': 'localhost'}
+    ]
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

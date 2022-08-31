@@ -1,5 +1,7 @@
 # Utils
 from datetime import datetime, timezone
+from drf_spectacular.utils import extend_schema_serializer
+from drf_spectacular.utils import OpenApiExample
 
 # Django
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +16,29 @@ from warrants.models import Warrant
 from warrants import fields
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            'Warrant payload',
+            summary='Create or update a warrant',
+            description='Create or update a warrant',
+            value={
+                "origin_location": [-98.202624, 19.040869],
+                "destination_location": [-97.831364, 18.919244],
+                "is_active": True,
+                "address": "Cuahutemoc",
+                "zipcode": "75420",
+                "ext_number": "07",
+                "int_number": "B-311",
+                "number_products": 3,
+                "products_size": "LG",
+                "status": "CREATED"
+            },
+            request_only=True,
+            response_only=False,
+        ),
+    ]
+)
 class WarrantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Warrant
