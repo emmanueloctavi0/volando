@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     # Other apps
     'django.contrib.gis',
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_spectacular',
 
     # Local apps
     'volando',
+    'users',
     'orders',
 ]
 
@@ -112,6 +114,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+
 
 # Django REST Framework
 REST_FRAMEWORK = {

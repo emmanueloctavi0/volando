@@ -13,12 +13,12 @@ from rest_framework.test import APITestCase
 from orders.models import Order
 
 
-ORDER_URL = reverse('order-list')
+ORDER_URL = reverse('orders:order-list')
 
 
 def detail_url(order_id):
     """Return order detail URL"""
-    return reverse('order-detail', args=[order_id])
+    return reverse('orders:order-detail', args=[order_id])
 
 
 def get_order_payload(**params):
@@ -71,6 +71,7 @@ class OrderCreationTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Order.objects.count(), 1)
         self.assertEqual(Order.objects.get().status, Order.Status.CREATED)
+
 
 class OrderUpdateTests(APITestCase):
 
