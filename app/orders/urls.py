@@ -9,7 +9,7 @@ from orders import views
 
 
 router = routers.DefaultRouter()
-router.register(r'orders', views.OrderViewSet)
+router.register('', views.OrderViewSet)
 
 app_name = 'orders'
 

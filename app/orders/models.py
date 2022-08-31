@@ -6,6 +6,9 @@ from django.contrib.gis.db import models
 
 # Models
 from volando.models import BaseModel
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Order(BaseModel):
@@ -65,6 +68,13 @@ class Order(BaseModel):
         max_length=30,
         choices=Status.choices,
         default=Status.CREATED,
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     def __str__(self):
