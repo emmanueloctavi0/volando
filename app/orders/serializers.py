@@ -46,6 +46,16 @@ class OrderSerializer(serializers.ModelSerializer):
     origin_location = fields.CoordinateField()
     destination_location = fields.CoordinateField()
 
+    products_size = serializers.ChoiceField(
+        choices=Order.ProductsSize.choices,
+        error_messages={
+            'invalid_choice': _(
+                '"{input}" is not a valid choice. '
+                'If you required other size please contact us.'
+            )
+        }
+    )
+
     def validate_status(self, value: str) -> str:
         """
         If the instance is created the status always is created
