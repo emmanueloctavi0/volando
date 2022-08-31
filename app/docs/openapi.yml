@@ -42,7 +42,6 @@ paths:
                   destination_location:
                   - -97.831364
                   - 18.919244
-                  is_active: true
                   address: Cuahutemoc
                   zipcode: '75420'
                   ext_number: '07'
@@ -114,7 +113,6 @@ paths:
                   destination_location:
                   - -97.831364
                   - 18.919244
-                  is_active: true
                   address: Cuahutemoc
                   zipcode: '75420'
                   ext_number: '07'
@@ -162,7 +160,6 @@ paths:
                   destination_location:
                   - -97.831364
                   - 18.919244
-                  is_active: true
                   address: Cuahutemoc
                   zipcode: '75420'
                   ext_number: '07'
@@ -224,8 +221,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-        is_active:
-          type: boolean
         address:
           type: string
           maxLength: 250
@@ -286,8 +281,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-        is_active:
-          type: boolean
         address:
           type: string
           maxLength: 250

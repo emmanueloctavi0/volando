@@ -14,10 +14,5 @@ class BaseModel(models.Model):
         auto_now=True
     )
 
-    is_active = models.BooleanField(
-        _('Is active'),
-        default=True
-    )
-
     class Meta:
         abstract = True

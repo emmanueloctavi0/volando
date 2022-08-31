@@ -25,7 +25,6 @@ from warrants import fields
             value={
                 "origin_location": [-98.202624, 19.040869],
                 "destination_location": [-97.831364, 18.919244],
-                "is_active": True,
                 "address": "Cuahutemoc",
                 "zipcode": "75420",
                 "ext_number": "07",
