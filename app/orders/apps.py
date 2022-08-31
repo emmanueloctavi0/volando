@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class WarrantsConfig(AppConfig):
+class OrdersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'warrants'
+    name = 'orders'

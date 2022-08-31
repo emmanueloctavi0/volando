@@ -10,18 +10,18 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 # Models
-from warrants.models import Warrant
+from orders.models import Order
 
 # Fields
-from warrants import fields
+from orders import fields
 
 
 @extend_schema_serializer(
     examples=[
         OpenApiExample(
-            'Warrant payload',
-            summary='Create or update a warrant',
-            description='Create or update a warrant',
+            'Order payload',
+            summary='Create or update a Order',
+            description='Create or update a Order',
             value={
                 "origin_location": [-98.202624, 19.040869],
                 "destination_location": [-97.831364, 18.919244],
@@ -38,9 +38,9 @@ from warrants import fields
         ),
     ]
 )
-class WarrantSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Warrant
+        model = Order
         fields = "__all__"
 
     origin_location = fields.CoordinateField()
@@ -49,30 +49,30 @@ class WarrantSerializer(serializers.ModelSerializer):
     def validate_status(self, value: str) -> str:
         """
         If the instance is created the status always is created
-        The warrant can't be cancelled if it status is
+        The Order can't be cancelled if it status is
         ON_ROUTE or DELIVERED
         """
         # If update
         if self.instance:
             status = self.instance.status
             if (
-                status == Warrant.Status.DELIVERED
-                or status == Warrant.Status.ON_ROUTE
-            ) and value == Warrant.Status.CANCELLED:
+                status == Order.Status.DELIVERED
+                or status == Order.Status.ON_ROUTE
+            ) and value == Order.Status.CANCELLED:
 
                 raise serializers.ValidationError(
-                    _("The warrant can't be cancelled")
+                    _("The order can't be cancelled")
                 )
 
             return value
         else:
-            return Warrant.Status.CREATED
+            return Order.Status.CREATED
 
     def save(self, **kwargs):
         """Check if a refund is possible"""
         if (
             self.instance
-            and self.validated_data["status"] == Warrant.Status.CANCELLED
+            and self.validated_data["status"] == Order.Status.CANCELLED
         ):
             now = datetime.now(timezone.utc)
             diff_time = now - self.instance.created_at

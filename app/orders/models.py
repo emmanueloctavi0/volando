@@ -8,7 +8,7 @@ from django.contrib.gis.db import models
 from volando.models import BaseModel
 
 
-class Warrant(BaseModel):
+class Order(BaseModel):
     origin_location = models.PointField(
         _('Origin coordinates'),
     )
@@ -61,7 +61,7 @@ class Warrant(BaseModel):
         CANCELLED = 'CANCELLED', _('Cancelled')
 
     status = models.CharField(
-        _('Warrant status'),
+        _('Order status'),
         max_length=30,
         choices=Status.choices,
         default=Status.CREATED,

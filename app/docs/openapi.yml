@@ -4,12 +4,12 @@ info:
   version: 1.0.0
   description: A microservice to take users orders
 paths:
-  /warrants/:
+  /orders/:
     get:
-      operationId: warrants_list
-      description: API endpoint that allows warrants to be viewed or edited.
+      operationId: orders_list
+      description: API endpoint that allows Orders to be viewed or edited.
       tags:
-      - warrants
+      - orders
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -21,20 +21,20 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Warrant'
+                  $ref: '#/components/schemas/Order'
           description: ''
     post:
-      operationId: warrants_create
-      description: API endpoint that allows warrants to be viewed or edited.
+      operationId: orders_create
+      description: API endpoint that allows Orders to be viewed or edited.
       tags:
-      - warrants
+      - orders
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Warrant'
+              $ref: '#/components/schemas/Order'
             examples:
-              WarrantPayload:
+              OrderPayload:
                 value:
                   origin_location:
                   - -98.202624
@@ -49,8 +49,8 @@ paths:
                   number_products: 3
                   products_size: LG
                   status: CREATED
-                summary: Create or update a warrant
-                description: Create or update a warrant
+                summary: Create or update a Order
+                description: Create or update a Order
         required: true
       security:
       - cookieAuth: []
@@ -61,21 +61,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Warrant'
+                $ref: '#/components/schemas/Order'
           description: ''
-  /warrants/{id}/:
+  /orders/{id}/:
     get:
-      operationId: warrants_retrieve
-      description: API endpoint that allows warrants to be viewed or edited.
+      operationId: orders_retrieve
+      description: API endpoint that allows Orders to be viewed or edited.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
-        description: A unique integer value identifying this warrant.
+        description: A unique integer value identifying this order.
         required: true
       tags:
-      - warrants
+      - orders
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -85,27 +85,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Warrant'
+                $ref: '#/components/schemas/Order'
           description: ''
     put:
-      operationId: warrants_update
-      description: API endpoint that allows warrants to be viewed or edited.
+      operationId: orders_update
+      description: API endpoint that allows Orders to be viewed or edited.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
-        description: A unique integer value identifying this warrant.
+        description: A unique integer value identifying this order.
         required: true
       tags:
-      - warrants
+      - orders
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Warrant'
+              $ref: '#/components/schemas/Order'
             examples:
-              WarrantPayload:
+              OrderPayload:
                 value:
                   origin_location:
                   - -98.202624
@@ -120,8 +120,8 @@ paths:
                   number_products: 3
                   products_size: LG
                   status: CREATED
-                summary: Create or update a warrant
-                description: Create or update a warrant
+                summary: Create or update a Order
+                description: Create or update a Order
         required: true
       security:
       - cookieAuth: []
@@ -132,27 +132,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Warrant'
+                $ref: '#/components/schemas/Order'
           description: ''
     patch:
-      operationId: warrants_partial_update
-      description: API endpoint that allows warrants to be viewed or edited.
+      operationId: orders_partial_update
+      description: API endpoint that allows Orders to be viewed or edited.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
-        description: A unique integer value identifying this warrant.
+        description: A unique integer value identifying this order.
         required: true
       tags:
-      - warrants
+      - orders
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedWarrant'
+              $ref: '#/components/schemas/PatchedOrder'
             examples:
-              WarrantPayload:
+              OrderPayload:
                 value:
                   origin_location:
                   - -98.202624
@@ -167,8 +167,8 @@ paths:
                   number_products: 3
                   products_size: LG
                   status: CREATED
-                summary: Create or update a warrant
-                description: Create or update a warrant
+                summary: Create or update a Order
+                description: Create or update a Order
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -178,20 +178,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Warrant'
+                $ref: '#/components/schemas/Order'
           description: ''
     delete:
-      operationId: warrants_destroy
-      description: API endpoint that allows warrants to be viewed or edited.
+      operationId: orders_destroy
+      description: API endpoint that allows Orders to be viewed or edited.
       parameters:
       - in: path
         name: id
         schema:
           type: integer
-        description: A unique integer value identifying this warrant.
+        description: A unique integer value identifying this order.
         required: true
       tags:
-      - warrants
+      - orders
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -201,7 +201,7 @@ paths:
           description: No response body
 components:
   schemas:
-    PatchedWarrant:
+    Order:
       type: object
       properties:
         id:
@@ -245,7 +245,64 @@ components:
         status:
           allOf:
           - $ref: '#/components/schemas/StatusEnum'
-          title: Warrant status
+          title: Order status
+      required:
+      - address
+      - created_at
+      - destination_location
+      - ext_number
+      - id
+      - int_number
+      - number_products
+      - origin_location
+      - products_size
+      - updated_at
+      - zipcode
+    PatchedOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        origin_location:
+          type: array
+          items: {}
+        destination_location:
+          type: array
+          items: {}
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        address:
+          type: string
+          maxLength: 250
+        zipcode:
+          type: string
+          maxLength: 100
+        ext_number:
+          type: string
+          title: Number
+          maxLength: 50
+        int_number:
+          type: string
+          title: Internal number
+          maxLength: 50
+        number_products:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          title: Number of products
+        products_size:
+          $ref: '#/components/schemas/ProductsSizeEnum'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Order status
     ProductsSizeEnum:
       enum:
       - SM
@@ -261,63 +318,6 @@ components:
       - DELIVERED
       - CANCELLED
       type: string
-    Warrant:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        origin_location:
-          type: array
-          items: {}
-        destination_location:
-          type: array
-          items: {}
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        address:
-          type: string
-          maxLength: 250
-        zipcode:
-          type: string
-          maxLength: 100
-        ext_number:
-          type: string
-          title: Number
-          maxLength: 50
-        int_number:
-          type: string
-          title: Internal number
-          maxLength: 50
-        number_products:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          title: Number of products
-        products_size:
-          $ref: '#/components/schemas/ProductsSizeEnum'
-        status:
-          allOf:
-          - $ref: '#/components/schemas/StatusEnum'
-          title: Warrant status
-      required:
-      - address
-      - created_at
-      - destination_location
-      - ext_number
-      - id
-      - int_number
-      - number_products
-      - origin_location
-      - products_size
-      - updated_at
-      - zipcode
   securitySchemes:
     basicAuth:
       type: http

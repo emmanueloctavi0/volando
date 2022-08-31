@@ -6,11 +6,11 @@ from django.urls import include, path
 from rest_framework import routers
 
 # Views
-from warrants import views
+from orders import views
 
 
 router = routers.DefaultRouter()
-router.register(r'warrants', views.WarrantViewSet)
+router.register(r'orders', views.OrderViewSet)
 
 
 urlpatterns = [

@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'volando',
-    'warrants',
+    'orders',
 ]
 
 MIDDLEWARE = [
