@@ -1,14 +1,14 @@
 # Django
 from django.utils.translation import gettext_lazy as _
 
-# GEODJango
-from django.contrib.gis.geos import Point
-
 # Django REST Framework
 from rest_framework import serializers
 
 # Models
 from warrants.models import Warrant
+
+# Fields
+from warrants import fields
 
 
 class WarrantSerializer(serializers.ModelSerializer):
@@ -16,22 +16,14 @@ class WarrantSerializer(serializers.ModelSerializer):
         model = Warrant
         fields = '__all__'
 
-    def _validate_point(self, value: list) -> Point:
-        try:
-            return Point(value)
-        except TypeError:
-            raise serializers.ValidationError(_('Invalid geopoint'))
+    origin_location = fields.CoordinateField()
+    destination_location = fields.CoordinateField()
 
-    def validate_origin_location(self, value: list) -> Point:
-        return self._validate_point(value)
-
-    def validate_destination_location(self, value: list) -> Point:
-        return self._validate_point(value)
-
-    def save(self, **kwargs):
-        # Always save it with the status created
-        if not self.instance:
-            self.validated_data.update({
-                'status': Warrant.Status.CREATED
-            })
-        return super().save(**kwargs)
+    def validate_status(self, value: str) -> str:
+        """
+        If the instance is created the status always is created
+        """
+        if self.instance:
+            return value
+        else:
+            return Warrant.Status.CREATED
