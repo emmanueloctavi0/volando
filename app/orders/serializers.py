@@ -41,7 +41,8 @@ from orders import fields
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        exclude = ('user',)
+        fields = '__all__'
+        read_only_fields = ('id',)
 
     origin_location = fields.CoordinateField()
     destination_location = fields.CoordinateField()
