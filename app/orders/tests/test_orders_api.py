@@ -1,5 +1,6 @@
 # Django
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 # GEODjango
 from django.contrib.gis.geos import Point
@@ -11,6 +12,7 @@ from rest_framework.test import APITestCase
 
 # Models
 from orders.models import Order
+User = get_user_model()
 
 
 ORDER_URL = reverse('orders:order-list')
@@ -49,7 +51,22 @@ def sample_order(**params):
     return Order.objects.create(**data)
 
 
+def sample_user(**params):
+    defaults = {
+        "username": "user1",
+        "password": "Secret@123"
+    }
+
+    defaults.update(**params)
+    return User.objects.create_user(**defaults)
+
+
 class OrderCreationTests(APITestCase):
+
+    def setUp(self) -> None:
+        self.user = sample_user()
+        self.client.force_authenticate(self.user)
+
     def test_create_order(self):
         """
         Ensure we can create a new order object.
@@ -76,7 +93,9 @@ class OrderCreationTests(APITestCase):
 class OrderUpdateTests(APITestCase):
 
     def setUp(self):
-        self.order = sample_order()
+        self.user = sample_user()
+        self.client.force_authenticate(self.user)
+        self.order = sample_order(user=self.user)
 
     def test_update_order_fields(self):
         """
@@ -108,7 +127,7 @@ class OrderUpdateTests(APITestCase):
         """Test a order status can change from
         created to collected
         """
-        order = sample_order()
+        order = sample_order(user=self.user)
         url = detail_url(order.pk)
 
         payload = {
@@ -126,7 +145,7 @@ class OrderUpdateTests(APITestCase):
         """Test a order status can change from
         collected to in_station
         """
-        order = sample_order(status=Order.Status.COLLECTED)
+        order = sample_order(status=Order.Status.COLLECTED, user=self.user)
         url = detail_url(order.pk)
 
         payload = {
@@ -144,7 +163,7 @@ class OrderUpdateTests(APITestCase):
         """Test a order status can change from
         in_station to on_route
         """
-        order = sample_order(status=Order.Status.IN_STATION)
+        order = sample_order(status=Order.Status.IN_STATION, user=self.user)
         url = detail_url(order.pk)
 
         payload = {
@@ -162,7 +181,7 @@ class OrderUpdateTests(APITestCase):
         """Test a order status can change from
         on_route to delivered
         """
-        order = sample_order(status=Order.Status.ON_ROUTE)
+        order = sample_order(status=Order.Status.ON_ROUTE, user=self.user)
         url = detail_url(order.pk)
 
         payload = {
@@ -181,7 +200,7 @@ class OrderUpdateTests(APITestCase):
         Test the status can be cancelled when
         the status is created
         """
-        order = sample_order(status=Order.Status.CREATED)
+        order = sample_order(status=Order.Status.CREATED, user=self.user)
         url = detail_url(order.pk)
 
         payload = {
@@ -200,7 +219,7 @@ class OrderUpdateTests(APITestCase):
         Test the status can not be cancelled when
         the status is on_route
         """
-        order = sample_order(status=Order.Status.ON_ROUTE)
+        order = sample_order(status=Order.Status.ON_ROUTE, user=self.user)
         url = detail_url(order.pk)
 
         payload = {
@@ -219,7 +238,7 @@ class OrderUpdateTests(APITestCase):
         Test the status can not be cancelled when
         the status is delivered
         """
-        order = sample_order(status=Order.Status.DELIVERED)
+        order = sample_order(status=Order.Status.DELIVERED, user=self.user)
         url = detail_url(order.pk)
 
         payload = {
