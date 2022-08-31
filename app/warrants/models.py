@@ -64,4 +64,11 @@ class Warrant(BaseModel):
         _('Warrant status'),
         max_length=30,
         choices=Status.choices,
+        default=Status.CREATED,
     )
+
+    def __str__(self):
+        return (
+            f'{self.id} - {self.address} '
+            f'- {self.status} - {self.created_at}'
+        )

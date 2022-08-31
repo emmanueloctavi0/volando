@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Other apps
+    'django.contrib.gis',
+    'rest_framework',
+
     # Local apps
     'volando',
     'warrants',
