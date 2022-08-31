@@ -19,3 +19,5 @@ services:
     image: postgis/postgis:14-3.2-alpine
     env_file:
       - app/envs/.env
+    ports:
+      - "5432:5432"
