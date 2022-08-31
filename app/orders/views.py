@@ -35,7 +35,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         create the order with the user sended.
         otherwise crete the order with the logged user
         """
-        if self.request.user.is_superuser and serializer.validated_data.get('user'):
+        if (
+            self.request.user.is_superuser
+            and serializer.validated_data.get('user')
+        ):
             serializer.save()
         else:
             serializer.save(user=self.request.user)
