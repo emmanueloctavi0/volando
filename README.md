@@ -38,7 +38,7 @@ Compila las imágenes de docker
     
 Ejecuta el proyecto
 
-    $ docker compose up -d
+    $ docker compose up
 
 Con esto ya puedes interactuar con la API en http://localhost:8000/v1/orders/
 
