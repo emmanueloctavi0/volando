@@ -2,7 +2,7 @@
 
 La meta de este proyecto es crear un microservicio para administrar las ordenes de los usuarios para una empresa de logística
 
-Hecho en Django 4.1 y Django REST Framework y GEODjango
+Hecho con Django 4.1, Django REST Framework y GEODjango
 
 ![Admin view](./doc_imgs/admin.png)
 
